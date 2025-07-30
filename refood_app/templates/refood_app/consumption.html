@@ -1,0 +1,291 @@
+{% extends 'refood_app/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans "Home" %} {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- Start Generic Area -->
+<section class="about-generic-area section-gap-60" id="home">
+	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+		<h1 class="display-4">Let´s start with your info</h1>
+		<p class="lead">Provide the information required about your building. The more details you give, the best offer we can make to you</p>
+	</div>
+</section>
+	<section class="about-generic-area section-gap-60">
+		<div class="container">
+			<!--- Trying stuff --->
+			<form action="{% url 'refood_app:consumption' %}" method="post">
+				{% csrf_token %}
+				<div id="accordion">
+				  <div class="login-form">
+					  <div class="card">
+						<div class="card-header" id="headingFour">
+						  <h5 class="mb-0">
+							<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+							  Consumption habits
+							</button>
+						  </h5>
+						</div>
+						<div id="collapseFour" class="collapse show" aria-labelledby="headingFour" data-parent="#accordion">
+						  <div class="card-body">
+							  <legend>Select your consumption profile</legend><br />
+							  <br />
+							  <div class="row">
+							  <div class="col-md-4">
+								  <div class="card mb-4 shadow-sm">
+									<div id="chartContainer1" style="height: 300px; width: 100%;"></div>
+									  <div class="card-body">
+											<p class="card-text">Night consumer</p>
+										  <div class="d-flex justify-content-between align-items-center">
+											<div class="btn-group">
+											  <button type="button" class="btn btn-sm btn-outline-secondary">Select</button>
+											</div>
+											<!--small class="text-muted">9 mins</small-->
+										  </div>
+									  </div>
+								  </div>
+								</div>
+								<div class="col-md-4">
+								  <div class="card mb-4 shadow-sm">
+									  <div id="chartContainer2" style="height: 300px; width: 100%;"></div>
+									<div class="card-body">
+									  <p class="card-text">Day consumer</p>
+									  <div class="d-flex justify-content-between align-items-center">
+										<div class="btn-group">
+										  <button type="button" class="btn btn-sm btn-outline-secondary">Select</button>
+										</div>
+										<!--small class="text-muted">9 mins</small-->
+									  </div>
+									</div>
+								  </div>
+								</div>
+								<div class="col-md-4">
+								  <div class="card mb-4 shadow-sm">
+									<div id="chartContainer3" style="height: 300px; width: 100%;"></div>
+									<div class="card-body">
+									  <p class="card-text">Steady consumer</p>
+									  <div class="d-flex justify-content-between align-items-center">
+										<div class="btn-group">
+										  <button type="button" class="btn btn-sm btn-outline-secondary">Select</button>
+										</div>
+										<!--small class="text-muted">9 mins</small-->
+									  </div>
+									</div>
+								  </div>
+								</div>
+							  </div><br />
+							  <br />
+							  <legend>Select the technologies used at your building</legend>
+							  <section class="about-generic-area section-gap-60">
+							  <div class="container">
+							  <div class="row">
+								  <div class="login-form col-md-5">
+									  <legend>Climate</legend>
+									  <ul class="list-group">
+										<li class="list-group-item">
+											Electric Heating
+											<div class="material-switch pull-right">
+												<input id="ElectricHeater" name="someSwitchOption001" type="checkbox"/>
+												<label for="ElectricHeater" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Gas burner
+											<div class="material-switch pull-right">
+												<input id="GasBurner" name="someSwitchOption001" type="checkbox"/>
+												<label for="GasBurner" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Air Conditioning
+											<div class="material-switch pull-right">
+												<input id="AC" name="someSwitchOption001" type="checkbox"/>
+												<label for="AC" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Electric boiler
+											<div class="material-switch pull-right">
+												<input id="ElectricB" name="someSwitchOption001" type="checkbox"/>
+												<label for="ElectricB" class="label-info"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Heat pump
+											<div class="material-switch pull-right">
+												<input id="HeatP" name="someSwitchOption001" type="checkbox"/>
+												<label for="HeatP" class="label-info"></label>
+											</div>
+										</li>
+									</ul>
+								  </div>
+								  <div class="login-form col-md-1"></div>
+								  <div class="login-form col-md-5">
+									<legend>Hot water supply</legend>
+									  <ul class="list-group">
+										<li class="list-group-item">
+											Instantaneous Electric Heater
+											<div class="material-switch pull-right">
+												<input id="Electric" name="someSwitchOption001" type="checkbox"/>
+												<label for="Electric" class="label-success"></label>
+											</div>
+										</li>
+										  <li class="list-group-item">
+											Hot water tank
+											<div class="material-switch pull-right">
+												<input id="Tank" name="someSwitchOption001" type="checkbox"/>
+												<label for="Tank" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Gas boiler
+											<div class="material-switch pull-right">
+												<input id="GasBr" name="someSwitchOption001" type="checkbox"/>
+												<label for="GasBr" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Heat pump
+											<div class="material-switch pull-right">
+												<input id="HeatW" name="someSwitchOption001" type="checkbox"/>
+												<label for="HeatW" class="label-success"></label>
+											</div>
+										</li>
+									</ul>
+								  </div>
+							  </div>
+							  </div>
+							  </section>
+							  <section class="about-generic-area section-gap-60">
+								  <div class="container">
+							  <div class="row">
+								  <div class="login-form col-md-5">
+									<legend>Appliances</legend>
+									  <ul class="list-group">
+										<li class="list-group-item">
+											Induction hot plate
+											<div class="material-switch pull-right">
+												<input id="Induction" type="checkbox"/>
+												<label for="Induction" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Ceramic hot plates
+											<div class="material-switch pull-right">
+												<input id="Ceramic" type="checkbox"/>
+												<label for="Ceramic" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Dryer
+											<div class="material-switch pull-right">
+												<input id="Dryer" type="checkbox"/>
+												<label for="Dryer" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Dishwasher
+											<div class="material-switch pull-right">
+												<input id="Dishwasher" name="someSwitchOption001" type="checkbox"/>
+												<label for="Dishwasher" class="label-info"></label>
+											</div>
+										</li>
+									</ul>
+								  </div>
+								  <div class="login-form col-md-1"></div>
+								  <div class="login-form col-md-5">
+									<legend>Comfort</legend>
+									  <ul class="list-group">
+										<li class="list-group-item">
+												Summer Swimming Pool
+												<div class="material-switch pull-right">
+													<input id="Summerpool" type="checkbox"/>
+													<label for="Summerpool" class="label-success"></label>
+												</div>
+										  </li>
+										  <li class="list-group-item">
+										  	Winter Swimming Pool
+										  	<div class="material-switch pull-right">
+											  	<input id="Winterpool" type="checkbox"/>
+											  	<label for="Winterpool" class="label-success"></label>
+										  	</div>
+										  </li>
+
+										<li class="list-group-item">
+											Elevator
+											<div class="material-switch pull-right">
+												<input id="Elevator" name="someSwitchOption001" type="checkbox"/>
+												<label for="Elevator" class="label-success"></label>
+											</div>
+										</li>
+									</ul>
+								  </div>
+							  </div>
+								  </div>
+							  </section>
+							  <section class="about-generic-area section-gap-60">
+								  <div class="container">
+									  <div class="row">
+										  <div class="form-group col-md-6">
+											<legend>PV and batteries</legend>
+											  <p>Insert total PV power installed </p>
+											  <p>
+												  <input type="text" id="PVinstalled" />
+												  <label for="PVinstalled">kWh</label>
+											  </p>
+											  <p>Insert total capacity of your battery</p>
+											  <p>
+												  <input type="text" id="Batteries" />
+												  <label for="Batteries">kWh</label>
+											  </p>
+										  </div>
+										  <div class="form-group col-md-6">
+											<legend>Electric vehicle</legend>
+												  <p>Insert maximum power of your vehicle </p>
+												  <p>
+													  <input type="text" id="PowerVeh" />
+													  <label for="PowerVeh">kW</label>
+												  </p>
+												  <p>Insert battery capacity</p>
+												  <p>
+													  <input type="text" id="BatteryCar" />
+													  <label for="BatteryCar">kWh</label>
+												  </p>
+												  <p>Insert discharging power</p>
+												  <p>
+													  <input type="text" id="PowerVehDis" />
+													  <label for="PowerVehDis">kW</label>
+												  </p>
+										 </div>
+									  </div>
+								  </div>
+							  </section>
+						  </div>
+						</div>
+					  </div>
+				</div>
+				</div>
+				<section class="about-generic-area section-gap-60">
+					<div class="container">
+						<div class="row justify-content-center d-flex">
+							<button type="submit" class="btn btn-primary">Next</button>
+						</div>
+					</div>
+				</section>
+      	 </form>
+		</div>
+	</section>
+
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ block.super }}
+	<script src="{% static 'refood_app/js/vendors/revolution/js/jquery.themepunch.tools.min.js' %}"></script>
+	<script src="{% static 'refood_app/js/vendors/revolution/js/jquery.themepunch.revolution.min.js' %}"></script>
+{% endblock javascripts %}

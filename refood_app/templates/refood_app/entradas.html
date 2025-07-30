@@ -1,0 +1,110 @@
+{% extends 'refood_app/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans "Home" %} {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- Start Generic Area -->
+<section class="about-generic-area section-gap-60" id="home">
+	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+		<h1 class="display-4">Let´s start with your info</h1>
+		<p class="lead">Provide the information required about your building. The more details you give, the best offer we can make to you</p>
+	</div>
+</section>
+	<section class="about-generic-area section-gap-60">
+		<div class="container">
+			<!--- Trying stuff --->
+			<form method="post" action="{% url 'refood_app:entradas' %}">
+				{% csrf_token %}
+				<div id="accordion">
+						  <div class="card">
+							<div class="card-header" id="headingTwo">
+							  <h5 class="mb-0">
+								<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+								  Building information
+								</button>
+							  </h5>
+							</div>
+							<div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion">
+							  <div class="card-body">
+								<div class="row">
+									<div class="login-form col-md-6">
+									<fieldset>
+										<legend> Building</legend>
+										<p>Fill with information about your building</p>
+										<div class="row">
+											<div class="col-md-5">
+												<p>
+												  {{form.building_type}}
+												</p>
+											</div>
+											<div class="col-md-5">
+												<p><label for="id_build_type">Type of Building</label></p>
+											</div>
+										</div>
+										<p>Introduce dimensions of your bulding</p>
+										<p>
+											{{form.dimension}}
+											<label for="dimension">Dimensions (m<sup>2</sup>)</label>
+									</fieldset>
+								</div>
+								<div class="login-form col-md-6">
+									<fieldset>
+										<legend>
+											<a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+												Building details
+											</a>
+										</legend>
+										<div class="collapse" id="collapseExample">
+											<p>Introduce details about your building</p>
+											<div class="row">
+												<div class="col-md-3">
+													<p>
+													  {{form.eff_class}}
+													</p>
+												</div>
+												<div class="col-md-3">
+													<label for="id_build_eff">Building class</label>
+												</div>
+											</div>
+												<p>Select holiday dates</p>
+												<p>
+												{{form.holiday_begin}}
+												<label for="date_beg">From</label>
+											</p>
+											<p>
+												{{form.holiday_end}}
+												<label for="date_end">To</label>
+											</p>
+										</div>
+									</fieldset>
+								</div>
+							</div>
+						</div>
+					  </div>
+                          </div>
+				</div>
+				<section class="about-generic-area section-gap-60">
+					<div class="container">
+						<div class="row justify-content-center d-flex">
+							<button type="submit" class="btn btn-primary">Next</button>
+						</div>
+					</div>
+				</section>
+      	 </form>
+		</div>
+	</section>
+
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ block.super }}
+	<script src="{% static 'refood_app/js/vendors/revolution/js/jquery.themepunch.tools.min.js' %}"></script>
+	<script src="{% static 'refood_app/js/vendors/revolution/js/jquery.themepunch.revolution.min.js' %}"></script>
+{% endblock javascripts %}

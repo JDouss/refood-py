@@ -1,0 +1,55 @@
+{% extends 'refood_app/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans "Home" %} {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- Start Generic Area -->
+<section class="about-generic-area section-gap-60" id="home">
+	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+		<h1 class="display-4">Bienvenido a la apliación de Refood</h1>
+		<p class="lead">Podemos poner un texto explicando refood.</p>
+	</div>
+</section>
+<section class="about-generic-area section-gap-60">
+  <div class="container">
+    <div id="accordion">
+      <div class="login-form">
+        <div class="card">
+          <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                REFOOD ESPAÑA
+              </button>
+            </h5>
+          </div>
+          <div id="collapseThree" class="collapse show" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <p>Elige el tipo de formulario</p>
+                  <a href="{% url 'refood_app:entradas' %}?tipo_form=A" class="btn btn-primary">Entradas</a>
+                  <a href="{% url 'refood_app:salidas' %}?tipo_form=B" class="btn btn-secondary">Salidas</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ block.super }}
+	<script src="{% static 'refood_app/js/vendors/revolution/js/jquery.themepunch.tools.min.js' %}"></script>
+	<script src="{% static 'refood_app/js/vendors/revolution/js/jquery.themepunch.revolution.min.js' %}"></script>
+{% endblock javascripts %}

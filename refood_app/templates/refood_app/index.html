@@ -1,0 +1,546 @@
+{% extends 'refood_app/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans "Home" %} {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- Start Generic Area -->
+<section class="about-generic-area section-gap-60" id="home">
+	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+		<h1 class="display-4">Let´s start with your info</h1>
+		<p class="lead">Provide the information required about your building. The more details you give, the best offer we can make to you</p>
+	</div>
+</section>
+	<section class="about-generic-area section-gap-60">
+		<div class="container">
+			<!--- Trying stuff --->
+			<form>
+				<div id="accordion">
+				  <div class="login-form">
+					<div class="card-header" id="headingOne">
+					  <h5 class="mb-0">
+						<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+						  Location
+						</button>
+					  </h5>
+					</div>
+
+					<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+					  <div class="card-body">
+						  <div class="row">
+							<div class="login-form col-md-6">
+								<fieldset>
+									<legend> Location </legend>
+									<p>Select your province/town.</p>
+									<p>
+									  <select id="dropdown">
+										<option>First option</option>
+										<option selected>Second option</option>
+										<option>Third option</option>
+									  </select>
+									</p>
+								</fieldset>
+							</div>
+							<div class="login-form col-md-6">
+								<fieldset>
+										<legend>
+											<a class="btn btn-primary" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">
+												Location details
+											</a>
+										</legend>
+										<div class="collapse" id="collapseExample1">
+											<legend> Location details</legend>
+											<p>Introduce information about your location</p>
+											<p>
+												<input type="text" id="longitude" />
+												<label for="longitude">Longitude</label>
+											</p>
+											<p>
+												<input type="text" id="latitude" />
+												<label for="latitude">Latitude</label>
+											</p>
+										</div>
+										</fieldset>
+									</div>
+								</div>
+								 <nav aria-label="Page navigation example">
+									 <ul class="pagination justify-content-center">
+										<li class="page-item">
+										  <a class="page-link" href="#headingTwo">Next</a>
+										</li>
+									 </ul>
+								 </nav>
+							  </div>
+							</div>
+						  </div>
+						  <div class="card">
+							<div class="card-header" id="headingTwo">
+							  <h5 class="mb-0">
+								<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+								  Building information
+								</button>
+							  </h5>
+							</div>
+							<div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion">
+							  <div class="card-body">
+								<div class="row">
+									<div class="login-form col-md-6">
+									<fieldset>
+										<legend> Building</legend>
+										<p>Fill with information about your building</p>
+										<div class="row">
+											<div class="col-md-5">
+												<p>
+												  <select id="dropdown2">
+													<option selected>Residential</option>
+													<option>Office</option>
+													<option>Hotel</option>
+													<option>Store</option>
+												  </select>
+												</p>
+											</div>
+											<div class="col-md-5">
+												<p><label for="dropdown2">Type of Building</label></p>
+											</div>
+										</div>
+										<p>Introduce dimensions of your bulding</p>
+										<p>
+											<input type="text" id="building_dim" />
+											<label for="building_dim">Dimensions (m<sup>2</sup>)</label>
+									</fieldset>
+								</div>
+								<div class="login-form col-md-6">
+									<fieldset>
+										<legend>
+											<a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+												Building details
+											</a>
+										</legend>
+										<div class="collapse" id="collapseExample">
+											<p>Introduce details about your building</p>
+											<div class="row">
+												<div class="col-md-3">
+													<p>
+													  <select id="dropdown3">
+														<option selected>A</option>
+														<option>B</option>
+														<option>C</option>
+														<option>D</option>
+													  </select>
+													</p>
+												</div>
+												<div class="col-md-3">
+													<label for="dropdown3">Building class</label>
+												</div>
+											</div>
+												<p>Select holiday dates</p>
+												<p>
+												<input id="date_beg" type="date">
+												<label for="date_beg">From</label>
+											</p>
+											<p>
+												<input id="date_end" type="date">
+												<label for="date_end">To</label>
+											</p>
+										</div>
+									</fieldset>
+								</div>
+							</div>
+						  <nav aria-label="Page navigation example">
+							 <ul class="pagination justify-content-center">
+								<li class="page-item">
+								  <a class="page-link" href="#headingThree">Next</a>
+								</li>
+							 </ul>
+						 </nav>
+						</div>
+					  </div>
+						  </div>
+				  <div class="card">
+					<div class="card-header" id="headingThree">
+					  <h5 class="mb-0">
+						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+						  Power & Tariffs
+						</button>
+					  </h5>
+					</div>
+					<div id="collapseThree" class="collapse show" aria-labelledby="headingThree" data-parent="#accordion">
+					  <div class="card-body">
+						  <div class="row">
+							<div class="login-form col-md-6">
+								<fieldset>
+									<p>Select your power limit.</p>
+									<p>
+									  <select id="dropdownP">
+										<option selected>4.3 kW</option>
+										<option>5.6 kW</option>
+										<option>6.9 kW</option>
+									  </select>
+									</p>
+									<p>Select your tariff.</p>
+									<p>
+									  <select id="dropdownT">
+										<option selected>A- General Tariff</option>
+										<option>B- Night Tariff or hourly discrimination Tariff</option>
+										<option>C- Supervalley Tariff</option>
+										  <option>Other</option>
+									  </select>
+									</p>
+									<p>Introduce last two monthly payments</p>
+									<div class="form-group row">
+										<div class="col-md-6">
+												<label for="ex1">Last payment</label>
+												<input class="form-control" id="lastpay" type="text">
+										</div>
+										<div class="col-md-6">
+												<label for="ex2">2 months ago</label>
+												<input class="form-control" id="2lastpay" type="text">
+										</div>
+									</div>
+								</fieldset>
+							</div>
+							<div class="login-form col-md-6">
+								<fieldset>
+										<legend>
+											<a class="btn btn-primary" data-toggle="collapse" href="#PowerDetails" role="button" aria-expanded="false" aria-controls="PowerDetails">
+												Power details
+											</a>
+										</legend>
+										<div class="collapse" id="PowerDetails">
+											<legend> Power & Tariffs details</legend>
+											<div class="form-group row">
+											  <div class="col-md-2">
+												<label for="ex1">Last payment</label>
+												<input class="form-control" id="ex1" type="text">
+											  </div>
+											  <div class="col-md-2">
+												<label for="ex2">2</label>
+												<input class="form-control" id="ex2" type="text">
+											  </div>
+											  <div class="col-md-2">
+												<label for="ex3">3</label>
+												<input class="form-control" id="ex3" type="text">
+											  </div>
+											  <div class="col-md-2">
+												<label for="ex3">4</label>
+												<input class="form-control" id="ex4" type="text">
+											  </div>
+											  <div class="col-md-2">
+												<label for="ex3">5</label>
+												<input class="form-control" id="ex5" type="text">
+											  </div>
+											  <div class="col-md-2">
+												<label for="ex3">6</label>
+												<input class="form-control" id="ex6" type="text">
+											  </div>
+											</div>
+											<div class="form-group row">
+											  <div class="col-md-2">
+												<label for="ex1">7</label>
+												<input class="form-control" id="ex7" type="text">
+											  </div>
+											  <div class="col-md-2">
+												<label for="ex2">8</label>
+												<input class="form-control" id="ex8" type="text">
+											  </div>
+											  <div class="col-md-2">
+												<label for="ex3">9</label>
+												<input class="form-control" id="ex9" type="text">
+											  </div>
+											  <div class="col-md-2">
+												<label for="ex3">10</label>
+												<input class="form-control" id="ex10" type="text">
+											  </div>
+											  <div class="col-md-2">
+												<label for="ex3">11</label>
+												<input class="form-control" id="ex11" type="text">
+											  </div>
+											  <div class="col-md-2">
+												<label for="ex3">12</label>
+												<input class="form-control" id="ex12" type="text">
+											  </div>
+											</div>
+										</div>
+								</fieldset>
+							</div>
+						</div>
+						  <nav aria-label="Page navigation example">
+							 <ul class="pagination justify-content-center">
+								<li class="page-item">
+								  <a class="page-link" href="#headingFour">Next</a>
+								</li>
+							 </ul>
+						 </nav>
+					  </div>
+					</div>
+				  </div>
+					  <div class="card">
+						<div class="card-header" id="headingFour">
+						  <h5 class="mb-0">
+							<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+							  Consumption habits
+							</button>
+						  </h5>
+						</div>
+						<div id="collapseFour" class="collapse show" aria-labelledby="headingFour" data-parent="#accordion">
+						  <div class="card-body">
+							  <legend>Select your consumption profile</legend><br />
+							  <br />
+							  <div class="row">
+							  <div class="col-md-4">
+								  <div class="card mb-4 shadow-sm">
+									<img class="card-img-top" src="static/refood_app/img/energy_profile.jpg">
+									  <div class="card-body">
+											<p class="card-text">Night consumer</p>
+										  <div class="d-flex justify-content-between align-items-center">
+											<div class="btn-group">
+											  <button type="button" class="btn btn-sm btn-outline-secondary">Select</button>
+											</div>
+											<!--small class="text-muted">9 mins</small-->
+										  </div>
+									  </div>
+								  </div>
+								</div>
+								<div class="col-md-4">
+								  <div class="card mb-4 shadow-sm">
+									  <img class="card-img-top" src="static/refood_app/img/energy_profile.jpg">
+									<div class="card-body">
+									  <p class="card-text">Day consumer</p>
+									  <div class="d-flex justify-content-between align-items-center">
+										<div class="btn-group">
+										  <button type="button" class="btn btn-sm btn-outline-secondary">Select</button>
+										</div>
+										<!--small class="text-muted">9 mins</small-->
+									  </div>
+									</div>
+								  </div>
+								</div>
+								<div class="col-md-4">
+								  <div class="card mb-4 shadow-sm">
+									<img class="card-img-top" src="static/refood_app/img/energy_profile.jpg">
+									<div class="card-body">
+									  <p class="card-text">Steady consumer</p>
+									  <div class="d-flex justify-content-between align-items-center">
+										<div class="btn-group">
+										  <button type="button" class="btn btn-sm btn-outline-secondary">Select</button>
+										</div>
+										<!--small class="text-muted">9 mins</small-->
+									  </div>
+									</div>
+								  </div>
+								</div>
+							  </div><br />
+							  <br />
+							  <legend>Select the technologies used at your building</legend>
+							  <section class="about-generic-area section-gap-60">
+							  <div class="container">
+							  <div class="row">
+								  <div class="login-form col-md-5">
+									  <legend>Climate</legend>
+									  <ul class="list-group">
+										<li class="list-group-item">
+											Electric Heating
+											<div class="material-switch pull-right">
+												<input id="ElectricHeater" name="someSwitchOption001" type="checkbox"/>
+												<label for="ElectricHeater" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Gas burner
+											<div class="material-switch pull-right">
+												<input id="GasBurner" name="someSwitchOption001" type="checkbox"/>
+												<label for="GasBurner" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Air Conditioning
+											<div class="material-switch pull-right">
+												<input id="AC" name="someSwitchOption001" type="checkbox"/>
+												<label for="AC" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Electric boiler
+											<div class="material-switch pull-right">
+												<input id="ElectricB" name="someSwitchOption001" type="checkbox"/>
+												<label for="ElectricB" class="label-info"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Heat pump
+											<div class="material-switch pull-right">
+												<input id="HeatP" name="someSwitchOption001" type="checkbox"/>
+												<label for="HeatP" class="label-info"></label>
+											</div>
+										</li>
+									</ul>
+								  </div>
+								  <div class="login-form col-md-1"></div>
+								  <div class="login-form col-md-5">
+									<legend>Hot water supply</legend>
+									  <ul class="list-group">
+										<li class="list-group-item">
+											Instantaneous Electric Heater
+											<div class="material-switch pull-right">
+												<input id="Electric" name="someSwitchOption001" type="checkbox"/>
+												<label for="Electric" class="label-success"></label>
+											</div>
+										</li>
+										  <li class="list-group-item">
+											Hot water tank
+											<div class="material-switch pull-right">
+												<input id="Tank" name="someSwitchOption001" type="checkbox"/>
+												<label for="Tank" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Gas boiler
+											<div class="material-switch pull-right">
+												<input id="GasBr" name="someSwitchOption001" type="checkbox"/>
+												<label for="GasBr" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Heat pump
+											<div class="material-switch pull-right">
+												<input id="HeatW" name="someSwitchOption001" type="checkbox"/>
+												<label for="HeatW" class="label-success"></label>
+											</div>
+										</li>
+									</ul>
+								  </div>
+							  </div>
+							  </div>
+							  </section>
+							  <section class="about-generic-area section-gap-60">
+								  <div class="container">
+							  <div class="row">
+								  <div class="login-form col-md-5">
+									<legend>Appliances</legend>
+									  <ul class="list-group">
+										<li class="list-group-item">
+											Induction hot plate
+											<div class="material-switch pull-right">
+												<input id="Induction" type="checkbox"/>
+												<label for="Induction" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Ceramic hot plates
+											<div class="material-switch pull-right">
+												<input id="Ceramic" type="checkbox"/>
+												<label for="Ceramic" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Dryer
+											<div class="material-switch pull-right">
+												<input id="Dryer" type="checkbox"/>
+												<label for="Dryer" class="label-success"></label>
+											</div>
+										</li>
+										<li class="list-group-item">
+											Dishwasher
+											<div class="material-switch pull-right">
+												<input id="Dishwasher" name="someSwitchOption001" type="checkbox"/>
+												<label for="Dishwasher" class="label-info"></label>
+											</div>
+										</li>
+									</ul>
+								  </div>
+								  <div class="login-form col-md-1"></div>
+								  <div class="login-form col-md-5">
+									<legend>Comfort</legend>
+									  <ul class="list-group">
+										<li class="list-group-item">
+												Summer Swimming Pool
+												<div class="material-switch pull-right">
+													<input id="Summerpool" type="checkbox"/>
+													<label for="Summerpool" class="label-success"></label>
+												</div>
+										  </li>
+										  <li class="list-group-item">
+										  	Winter Swimming Pool
+										  	<div class="material-switch pull-right">
+											  	<input id="Winterpool" type="checkbox"/>
+											  	<label for="Winterpool" class="label-success"></label>
+										  	</div>
+										  </li>
+
+										<li class="list-group-item">
+											Elevator
+											<div class="material-switch pull-right">
+												<input id="Elevator" name="someSwitchOption001" type="checkbox"/>
+												<label for="Elevator" class="label-success"></label>
+											</div>
+										</li>
+									</ul>
+								  </div>
+							  </div>
+								  </div>
+							  </section>
+							  <section class="about-generic-area section-gap-60">
+								  <div class="container">
+									  <div class="row">
+										  <div class="form-group col-md-6">
+											<legend>PV and batteries</legend>
+											  <p>Insert total PV power installed </p>
+											  <p>
+												  <input type="text" id="PVinstalled" />
+												  <label for="PVinstalled">kWh</label>
+											  </p>
+											  <p>Insert total capacity of your battery</p>
+											  <p>
+												  <input type="text" id="Batteries" />
+												  <label for="Batteries">kWh</label>
+											  </p>
+										  </div>
+										  <div class="form-group col-md-6">
+											<legend>Electric vehicle</legend>
+												  <p>Insert maximum power of your vehicle </p>
+												  <p>
+													  <input type="text" id="PowerVeh" />
+													  <label for="PowerVeh">kW</label>
+												  </p>
+												  <p>Insert battery capacity</p>
+												  <p>
+													  <input type="text" id="BatteryCar" />
+													  <label for="BatteryCar">kWh</label>
+												  </p>
+												  <p>Insert discharging power</p>
+												  <p>
+													  <input type="text" id="PowerVehDis" />
+													  <label for="PowerVehDis">kW</label>
+												  </p>
+										 </div>
+									  </div>
+								  </div>
+							  </section>
+						  </div>
+						</div>
+					  </div>
+				</div>
+				<section class="about-generic-area section-gap-60">
+					<div class="container">
+						<div class="row justify-content-center d-flex">
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</div>
+					</div>
+				</section>
+      	 </form>
+		</div>
+	</section>
+
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ block.super }}
+	<script src="{% static 'refood_app/js/vendors/revolution/js/jquery.themepunch.tools.min.js' %}"></script>
+	<script src="{% static 'refood_app/js/vendors/revolution/js/jquery.themepunch.revolution.min.js' %}"></script>
+{% endblock javascripts %}

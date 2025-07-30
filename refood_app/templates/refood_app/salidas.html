@@ -1,0 +1,91 @@
+{% extends 'refood_app/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans "Home" %} {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+<!-- Start Generic Area -->
+<section class="about-generic-area section-gap-60" id="home">
+	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+		<h1 class="display-4">Let´s start with your info</h1>
+		<p class="lead">Provide the information required about your building. The more details you give, the best offer we can make to you</p>
+	</div>
+</section>
+	<section class="about-generic-area section-gap-60">
+		<div class="container">
+			<!--- Trying stuff --->
+			<form action="{% url 'refood_app:salidas' %}" method="post">
+                {% csrf_token %}
+				<div id="accordion">
+					<div class="login-form">
+					<div class="card-header" id="headingOne">
+					  <h5 class="mb-0">
+						<button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+						  Location
+						</button>
+					  </h5>
+					</div>
+
+					<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+					  <div class="card-body">
+						  <div class="row">
+							<div class="login-form col-md-6">
+								<fieldset>
+									<legend> Location </legend>
+									<p>Select your province.</p>
+										{{form.province}}
+									<p>Select your province.</p>
+									<div id="drop_town">
+										{{form.town}}
+									</div>
+								</fieldset>
+							</div>
+							<div class="login-form col-md-6">
+								<fieldset>
+										<legend>
+											<a class="btn btn-primary" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">
+												Location details
+											</a>
+										</legend>
+										<div class="collapse" id="collapseExample1">
+											<legend> Location details</legend>
+											<p>Introduce information about your location</p>
+											<p>
+												{{form.longitude}}
+												<label for="longitude">Longitude</label>
+											</p>
+											<p>
+												{{form.latitude}}
+												<label for="latitude">Latitude</label>
+											</p>
+										</div>
+										</fieldset>
+									</div>
+								</div>
+							  </div>
+							</div>
+						  </div>
+						</div>
+				<section class="about-generic-area section-gap-60">
+					<div class="container">
+						<div class="row justify-content-center d-flex">
+							<button type="submit" class="btn btn-primary">Next</button>
+						</div>
+					</div>
+				</section>
+      	 </form>
+		</div>
+	</section>
+
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ block.super }}
+	<script src="{% static 'refood_app/js/vendors/revolution/js/jquery.themepunch.tools.min.js' %}"></script>
+	<script src="{% static 'refood_app/js/vendors/revolution/js/jquery.themepunch.revolution.min.js' %}"></script>
+{% endblock javascripts %}
