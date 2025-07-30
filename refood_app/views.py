@@ -1,17 +1,17 @@
-from django.db import connections
-from django.core import serializers
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
-from django.views import generic
-from django.views.generic import ListView, CreateView, UpdateView
-from django.urls import reverse_lazy
-from django.shortcuts import render, redirect
-import json
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
 
 from .forms import MenuPrincipalForm,EntradasForm,SalidasForm
 
+@login_required
+def redirigir_por_grupo(request):
+    if request.user.groups.filter(name='Administradores').exists():
+        return redirect('/admin')
+    else:
+        return redirect('menu_principal')
 
+
+@login_required
 def menu_principal(request):
     return render(request, 'refood_app/menu_principal.html', {'form': MenuPrincipalForm()})
 

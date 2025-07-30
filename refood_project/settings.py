@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
     'refood_app', # This is the app we created for the ReFood project
 ]
 
@@ -75,11 +76,21 @@ WSGI_APPLICATION = 'refood_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'refood_app_db',
+        'USER': 'django_user',
+        'PASSWORD': 'tu_password',
+        'HOST': 'localhost',  # ej: 'localhost' o un RDS
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
     }
 }
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'redirigir_por_grupo'
+LOGOUT_REDIRECT_URL = 'login'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
