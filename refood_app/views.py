@@ -39,6 +39,7 @@ def entradas(request):
 
 
     form = EntradasForm()
+    print("DEBUG CHOICES:", list(form.fields['nombre_alimento'].choices))
     return render(request, 'refood_app/entradas.html', {
             'form': form,
         })

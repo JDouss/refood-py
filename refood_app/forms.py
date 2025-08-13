@@ -18,19 +18,38 @@ class MenuPrincipalForm(forms.Form):
                                  choices=TIPO_CHOICES)
 
 class EntradasForm(forms.Form):
-    nombre_alimento = forms.ChoiceField(widget=forms.Select(attrs={'id': 'id_nombre_alimento_entrada'}),
-                                        choices=['Lasaña','Lentejas','Arroz'],
-                                      required=False)
-    donante = forms.ChoiceField(widget=forms.Select(attrs={'id': 'id_build_eff'}),
+    TIPO_ALIMENTO = [
+        (1, 'Lasaña'),
+        (2, 'Lentejas'),
+        (3, 'Arroz'),
+    ]
+    nombre_alimento = forms.ChoiceField(
+        widget=forms.Select(attrs={
+            'id': 'id_nombre_alimento_entrada',
+            'class': 'form-control'
+        }),
+        choices=TIPO_ALIMENTO,
+        required=True
+    )
+    peso = forms.DecimalField(
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control'
+        }),
+        required=True
+    )
+    donante = forms.ChoiceField(widget=forms.Select(attrs={'id': 'id_donante'}),
                                 choices=['D1','D2','D3'],
-                                  required=False)
-    peso = forms.CharField(widget=forms.TextInput(attrs={'id': 'peso'}), required=True)
-    fecha_llegada = forms.DateField(widget=forms.SelectDateWidget(attrs={'id': 'date_beg'}),
-                                    required=False,
-                                    )
-    nombre_alimento = forms.ChoiceField(widget=forms.Select(attrs={'id': 'id_nombre_alimento_entrada'}),
-                                        choices=['Comida Preparada', 'Fruta y verdura'],
-                                        required=False)
+                                  required=True)
+    fecha_llegada = forms.DateTimeField(
+        widget=forms.DateTimeInput(
+            attrs={
+                'type': 'datetime-local',
+                'id': 'date_beg',
+            }
+        ),
+        required=True,
+        initial=timezone.now,
+    )
 
 class SalidasForm(forms.Form):
     building_type = forms.ChoiceField(widget=forms.Select(attrs={'id': 'id_build_type'}), choices=['A'],
