@@ -9,59 +9,61 @@
 
 {% block content %}
 <section class="about-generic-area section-gap-60">
-	<div class="container">
-		<form method="post" action="{% url 'entradas' %}">
-			{% csrf_token %}
-			<div class="card">
-				<div class="card-header" id="headingTwo">
-					<h5 class="mb-0">Formulario de entradas	</h5>
-				</div>
-				<div class="card-body">
-					<div class="row">
-						<div class="login-form col-md-6">
-							<fieldset>
-								<legend>Alimento de entrada</legend>
-								<p>Selecciona el tipo de alimento</p>
-								<div class="form-group row">
-										{{ form.nombre_alimento }}
-								</div>
-							</fieldset>
-							<fieldset>
-								<legend>Peso</legend>
-								<p>Introduce el peso en Kg</p>
-								<div class="form-group">
-									{{ form.peso }}
-								</div>
-							<fieldset>
-							<fieldset>
-								<legend>Donante</legend>
-								<p>Introduce el donante del alimento</p>
-								<div class="form-group">
-									{{ form.donante }}
-								</div>
-							<fieldset>
-							<fieldset>
-								<legend>Fecha de llegada</legend>
-								<p>Solo modificar si se introducen alimentos que no sean de hoy</p>
-								<div class="form-group">
-									{{ form.fecha_llegada }}
-								</div>
-							<fieldset>
-						</div>
-					</div>
-				</div>
-			</div>
+  <div class="container">
+    <form method="post" action="{% url 'entradas' %}">
+      {% csrf_token %}
+      <div class="card">
+        <div class="card-header" id="headingTwo">
+          <h5 class="mb-0">Formulario de entradas</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <!-- Columna izquierda: formulario -->
+            <div class="col-md-8">
+              <fieldset>
+                <legend>Alimento de entrada</legend>
+                <p>Selecciona el tipo de alimento</p>
+                <div class="form-group row">
+                  {{ form.nombre_alimento }}
+                </div>
+              </fieldset>
 
-			<section class="about-generic-area section-gap-60">
-				<div class="container">
-					<div class="row justify-content-center d-flex">
-						<button type="submit" class="btn btn-primary">Aceptar</button>
-					</div>
-				</div>
-			</section>
-		</form>
-	</div>
+              <fieldset>
+                <legend>Peso</legend>
+                <p>Introduce el peso en Kg</p>
+                <div class="form-group">
+                  {{ form.peso }}
+                </div>
+              </fieldset>
+
+              <fieldset>
+                <legend>Donante</legend>
+                <p>Introduce el donante del alimento</p>
+                <div class="form-group">
+                  {{ form.donante }}
+                </div>
+              </fieldset>
+
+              <fieldset>
+                <legend>Fecha de llegada</legend>
+                <p>Solo modificar si se introducen alimentos que no sean de hoy</p>
+                <div class="form-group">
+                  {{ form.fecha_llegada }}
+                </div>
+              </fieldset>
+            </div>
+
+            <!-- Columna derecha: botón -->
+            <div class="col-md-4 d-flex align-items-start justify-content-end">
+              <button type="submit" class="btn btn-primary">Aceptar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </section>
+
 {% endblock %}
 
 {% block javascripts %}

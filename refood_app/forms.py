@@ -1,12 +1,36 @@
+from datetime import datetime,timedelta
 from email.policy import default
 
 from django import forms
 from django.db import connections
 from django.utils import timezone
-from .models import AlEnt
+from .models import AlEnt,TipoAl,Donante,Benef
 
-def get_alimentos_entrada():
-    return AlEnt.objects.values_list('id_market', 'description')
+def get_tipos_alimentos():
+    return TipoAl.objects.values_list('id', 'nombre_alimento')
+
+def get_donantes():
+    return Donante.objects.values_list('id','nombre')
+
+def get_beneficiarios():
+    beneficiarios = Benef.objects.filter(activo=1).values_list("id", "id_beneficiario", "nombre_representante")
+    return [
+        (b[0], f"{b[1]} - {b[2]}")
+        for b in beneficiarios
+    ]
+
+def get_alimentos_entrada(fecha_llegada: datetime):
+    al_entrada = (AlEnt.objects.filter(
+        fecha_y_hora_entrada__gt=fecha_llegada
+    ).select_related(
+        "donante", "tipo_al"
+    ).values_list(
+        "id", "tipo_al__nombre_alimento", "donante__nombre"
+    ))
+    return [
+        (a[0], f"{a[1]} - {a[2]}")
+        for a in al_entrada
+    ]
 
 
 class MenuPrincipalForm(forms.Form):
@@ -14,8 +38,14 @@ class MenuPrincipalForm(forms.Form):
         ('entradas', 'Entradas'),
         ('salidas', 'Salidas'),
     ]
-    tipo_form = forms.ChoiceField(widget=forms.Select(attrs={'id': 'id_menu_principal', 'name': 'tipo_formulario'}),
-                                 choices=TIPO_CHOICES)
+    tipo_form = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={
+                'id': 'id_menu_principal', 'name': 'tipo_formulario'
+            }
+        ),
+        choices=TIPO_CHOICES
+    )
 
 class EntradasForm(forms.Form):
     TIPO_ALIMENTO = [
@@ -28,18 +58,23 @@ class EntradasForm(forms.Form):
             'id': 'id_nombre_alimento_entrada',
             'class': 'form-control'
         }),
-        choices=TIPO_ALIMENTO,
+        choices=get_tipos_alimentos(),
         required=True
     )
     peso = forms.DecimalField(
-        widget=forms.NumberInput(attrs={
-            'class': 'form-control'
-        }),
+        widget=forms.NumberInput(
+            attrs={
+                'class': 'form-control'
+            }
+        ),
         required=True
     )
-    donante = forms.ChoiceField(widget=forms.Select(attrs={'id': 'id_donante'}),
-                                choices=['D1','D2','D3'],
-                                  required=True)
+    donante = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={'id': 'id_donante'}),
+        choices=get_donantes(),
+        required=True
+    )
     fecha_llegada = forms.DateTimeField(
         widget=forms.DateTimeInput(
             attrs={
@@ -52,13 +87,41 @@ class EntradasForm(forms.Form):
     )
 
 class SalidasForm(forms.Form):
-    building_type = forms.ChoiceField(widget=forms.Select(attrs={'id': 'id_build_type'}), choices=['A'],
-                                      required=False)
-    dimension = forms.CharField(widget=forms.TextInput(attrs={'id': 'dimension'}),
-                                required=False)
-    eff_class = forms.ChoiceField(widget=forms.Select(attrs={'id': 'id_build_eff'}), choices=['A'],
-                                  required=False)
-    holiday_begin = forms.DateField(widget=forms.SelectDateWidget(attrs={'id': 'date_beg'}),
-                                    required=False)
-    holiday_end = forms.DateField(widget=forms.SelectDateWidget(attrs={'id': 'date_end'}),
-                                  required=False)
+    fecha_salida = forms.DateTimeField(
+        widget=forms.DateTimeInput(
+            attrs={
+                'type': 'datetime-local',  # HTML5 date+time picker
+                'class': 'form-control',
+            }
+        ),
+        required=True,
+        initial=timezone.now,  # inicializa con la fecha/hora actual
+    )
+
+    al_entrada = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,  # o forms.SelectMultiple para un <select multiple>
+        choices=[],  # se rellenará dinámicamente en __init__
+        required=True,
+    )
+
+    beneficiario = forms.ChoiceField(
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        choices=[],  # se rellenará dinámicamente en __init__
+        required=True,
+    )
+
+    num_tuppers = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
+        required=True,
+        min_value=1
+    )
+
+    def __init__(self, *args, fecha_llegada=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if fecha_llegada is None:
+            fecha_llegada = timezone.now() - timedelta(hours=12)
+        self.fecha_salida_val = fecha_llegada  # guardamos para usar en get_al_entrada
+        # Rellenar choices dinámicamente en cada instancia del formulario
+        self.fields['al_entrada'].choices = get_alimentos_entrada(fecha_llegada=fecha_llegada)
+        self.fields['beneficiario'].choices = get_beneficiarios()
+

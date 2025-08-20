@@ -63,7 +63,7 @@ class AlEnt(models.Model):
 
 
 class AlSal(models.Model):
-    fecha_salida = models.DateField()
+    fecha_salida = models.DateTimeField()
     benef = models.ForeignKey(Benef, on_delete=models.CASCADE)
     al_ent = models.ForeignKey(AlEnt, on_delete=models.CASCADE)
 
