@@ -20,8 +20,8 @@ class Donante(models.Model):
     telefono = models.CharField(max_length=20)
     email = models.EmailField()
     responsable = models.CharField(max_length=100)
-    fecha_alta = models.DateField()
-    fecha_baja = models.DateField(null=True, blank=True)
+    fecha_alta = models.DateTimeField(default=timezone.now)
+    fecha_baja = models.DateTimeField(null=True, blank=True)
     comentarios = models.TextField(blank=True)
     activo = models.BooleanField(default=True)
 
@@ -40,8 +40,8 @@ class Benef(models.Model):
     telefono_secundario = models.CharField(max_length=20)
     direccion = models.CharField(max_length=200)
     codigo_postal = models.CharField(max_length=10)
-    fecha_alta = models.DateField()
-    fecha_baja = models.DateField(null=True, blank=True)
+    fecha_alta = models.DateTimeField(default=timezone.now)
+    fecha_baja = models.DateTimeField(null=True, blank=True)
     numero_ninios = models.IntegerField()
     activo = models.BooleanField(default=False)
 
