@@ -58,7 +58,7 @@ class EntradasForm(forms.Form):
             'id': 'id_nombre_alimento_entrada',
             'class': 'form-control'
         }),
-        choices=get_tipos_alimentos(),
+        choices=[],
         required=True
     )
     peso = forms.DecimalField(
@@ -72,7 +72,7 @@ class EntradasForm(forms.Form):
     donante = forms.ChoiceField(
         widget=forms.Select(
             attrs={'id': 'id_donante'}),
-        choices=get_donantes(),
+        choices=[],
         required=True
     )
     fecha_llegada = forms.DateTimeField(
@@ -85,6 +85,12 @@ class EntradasForm(forms.Form):
         required=True,
         initial=timezone.now,
     )
+
+    def __init__(self, *args, fecha_llegada=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Rellenar choices dinámicamente en cada instancia del formulario
+        self.fields['nombre_alimento'].choices = get_tipos_alimentos()
+        self.fields['donante'].choices = get_donantes()
 
 class SalidasForm(forms.Form):
     fecha_salida = forms.DateTimeField(
