@@ -7,13 +7,13 @@ from django.utils import timezone
 from .models import AlEnt,TipoAl,Donante,Benef
 
 def get_tipos_alimentos():
-    return TipoAl.objects.values_list('id', 'nombre_alimento')
+    return TipoAl.objects.values_list('id', 'nombre_alimento').order_by('nombre_alimento')
 
 def get_donantes():
     return Donante.objects.values_list('id','nombre')
 
 def get_beneficiarios():
-    beneficiarios = Benef.objects.filter(activo=1).values_list("id", "id_beneficiario", "nombre_representante")
+    beneficiarios = Benef.objects.filter(activo=1).values_list("id", "id_beneficiario", "nombre_representante").order_by('id_beneficiario')
     return [
         (b[0], f"{b[1]} - {b[2]}")
         for b in beneficiarios
@@ -26,7 +26,7 @@ def get_alimentos_entrada(fecha_llegada: datetime):
         "donante", "tipo_al"
     ).values_list(
         "id", "tipo_al__nombre_alimento", "donante__nombre"
-    ))
+    )).order_by('tipo_al__nombre_alimento')
     return [
         (a[0], f"{a[1]} - {a[2]}")
         for a in al_entrada
@@ -108,6 +108,7 @@ class SalidasForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,  # o forms.SelectMultiple para un <select multiple>
         choices=[],  # se rellenará dinámicamente en __init__
         required=True,
+        # Ordenar alfabeticamente
     )
 
     beneficiario = forms.ChoiceField(

@@ -73,13 +73,9 @@
 							{% endcomment %}
 							<div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
 								<ul class="navbar-nav">
-									<li><a href="#home">{% trans "Home" %}</a></li>
-									<li><a href="#video">{% trans "Video" %}</a></li>
-									<li><a href="#Sploder">{% trans "Features" %}</a></li>
-									<!--<li><a href="#Why us">{% trans "Why us" %}</a></li>-->
-									<li><a href="#price">{% trans "Business Plan" %}</a></li>
-									<!--<li><a href="#team">{% trans "Team" %}</a></li>-->
-									<li><a href="#contact">{% trans "Contact" %}</a></li>
+									<li><a href="{% url 'menu_principal' %}">{% trans "Menu principal" %}</a></li>
+									<li><a href="{% url 'entradas' %}">{% trans "Entradas" %}</a></li>
+									<li><a href="{% url 'salidas' %}">{% trans "Salidas" %}</a></li>
 								</ul>
 							</div>
 						</div>
