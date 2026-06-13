@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from django.db.models import Sum, Min, Count
 from django.db.models.functions import TruncDate, ExtractWeekDay
 from datetime import datetime, timedelta, date
+from django.utils import timezone # Import timezone
 
 from .forms import MenuPrincipalForm,EntradasForm,SalidasForm
 from .models import AlEnt,Donante,TipoAl,AlSal,Benef
@@ -53,9 +54,18 @@ def entradas(request):
         })
 
 def salidas(request):
-    # if this is a POST request we need to process the form data
+    # Obtener la fecha seleccionada del request o usar la fecha actual por defecto
+    selected_date_str = request.GET.get('date')
+    if selected_date_str:
+        try:
+            min_date = datetime.strptime(selected_date_str, '%Y-%m-%d').date() # Cambiado a min_date
+        except ValueError:
+            min_date = timezone.localdate() # Si la fecha es inválida, usar la actual
+    else:
+        min_date = timezone.localdate() # Por defecto, la fecha actual
+
     if request.method == 'POST':
-        form = SalidasForm(request.POST)
+        form = SalidasForm(request.POST, min_date=min_date) # Pasar min_date al formulario
         if form.is_valid():
             fecha_salida = form.cleaned_data['fecha_salida']
             beneficiario_id = form.cleaned_data['beneficiario']
@@ -72,9 +82,12 @@ def salidas(request):
                 )
             return redirect('salidas')
 
-    form = SalidasForm()
+    else:
+        form = SalidasForm(min_date=min_date) # Pasar min_date al formulario para GET requests
+
     return render(request, 'refood_app/salidas.html', {
             'form': form,
+            'selected_date': min_date.strftime('%Y-%m-%d') # Pasar la fecha seleccionada a la plantilla
         })
 
 @login_required
