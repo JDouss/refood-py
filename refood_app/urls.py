@@ -11,5 +11,6 @@ urlpatterns = [
     path('menu_principal/', views.menu_principal, name='menu_principal'),
     path('', auth_views.LoginView.as_view(template_name='refood_app/login.html')),
     path('entradas/', views.entradas, name='entradas'),
-    path('salidas/', views.salidas, name='salidas')
+    path('salidas/', views.salidas, name='salidas'),
+    path('estadisticas/', views.estadisticas, name='estadisticas'),
 ]

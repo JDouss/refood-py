@@ -1,0 +1,230 @@
+{% extends 'refood_app/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Estadísticas{% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    .date-filter-container {
+        margin-bottom: 20px;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+    .date-filter-container label {
+        font-weight: bold;
+    }
+    .date-filter-container input[type="date"] {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    .stats-card {
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 0.25rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .stats-card h4 {
+        margin-bottom: 1rem;
+        color: #343a40;
+    }
+    .stats-card p {
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+    .stats-card p strong {
+        color: #007bff;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+<section class="about-generic-area section-gap-60" id="home">
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">Estadísticas de Alimentos</h1>
+        <p class="lead">Visualización de kilos de comida gestionados.</p>
+    </div>
+</section>
+
+<section class="about-generic-area section-gap-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="date-filter-container">
+                    <label for="startDate">Fecha Inicio:</label>
+                    <input type="date" id="startDate">
+                    <label for="endDate">Fecha Fin:</label>
+                    <input type="date" id="endDate">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="stats-card" id="overall-stats-card">
+                    <h4>Estadísticas Generales</h4>
+                    <p>Kilos Totales Registrados: <strong id="total-kilos-stat"></strong> kg</p>
+                    <p>Fecha de Primera Entrada: <strong id="min-date-stat"></strong></p>
+                    <p>Días Trabajados: <strong id="total-days-stat"></strong> días</p>
+                    <p>Kilos Medios por Día Trabajado: <strong id="avg-kilos-day-stat"></strong> kg</p>
+                    <p>Total de Beneficiarios: <strong id="total-beneficiarios-stat"></strong></p>
+                    <p>Beneficiarios Activos: <strong id="beneficiarios-activos-stat"></strong></p>
+                    <p>Total de Donantes: <strong id="total-donantes-stat"></strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Kilos Totales por Día de la Semana (Entradas)
+                    </div>
+                    <div class="card-body">
+                        <div id="graph-kilos-por-dia"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Kilos Totales por Donante (Entradas)
+                    </div>
+                    <div class="card-body">
+                        <div id="graph-kilos-por-donante"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super }}
+  <script>
+    const allEntriesData = JSON.parse('{{ all_entries_json|escapejs }}');
+    const overallStats = JSON.parse('{{ overall_stats_json|escapejs }}');
+
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+
+    // Set default dates
+    const today = new Date();
+    const firstEntryDate = allEntriesData.length > 0 ? new Date(allEntriesData[0].date) : today;
+
+    startDateInput.value = firstEntryDate.toISOString().split('T')[0];
+    endDateInput.value = today.toISOString().split('T')[0];
+
+    // Populate overall static stats
+    document.getElementById('total-beneficiarios-stat').textContent = overallStats.total_beneficiarios;
+    document.getElementById('beneficiarios-activos-stat').textContent = overallStats.beneficiarios_activos;
+    document.getElementById('total-donantes-stat').textContent = overallStats.total_donantes;
+
+    function filterAndRenderGraphs() {
+        const start = new Date(startDateInput.value);
+        const end = new Date(endDateInput.value);
+        end.setDate(end.getDate() + 1); // Include the end date fully
+
+        const filteredEntries = allEntriesData.filter(entry => {
+            const entryDate = new Date(entry.date);
+            return entryDate >= start && entryDate < end;
+        });
+
+        // --- Update Statistics Card (dynamic parts) ---
+        let filteredTotalKilos = 0;
+        const distinctDates = new Set();
+        let filteredMinDate = null;
+
+        filteredEntries.forEach(entry => {
+            filteredTotalKilos += entry.peso;
+            distinctDates.add(entry.date);
+            const entryDate = new Date(entry.date);
+            if (!filteredMinDate || entryDate < filteredMinDate) {
+                filteredMinDate = entryDate;
+            }
+        });
+
+        const filteredTotalDaysWorked = distinctDates.size;
+        const filteredAvgKilosPerDay = filteredTotalDaysWorked > 0 ? filteredTotalKilos / filteredTotalDaysWorked : 0;
+
+        document.getElementById('total-kilos-stat').textContent = filteredTotalKilos.toFixed(2);
+        document.getElementById('min-date-stat').textContent = filteredMinDate ? filteredMinDate.toISOString().split('T')[0] : 'N/A';
+        document.getElementById('total-days-stat').textContent = filteredTotalDaysWorked;
+        document.getElementById('avg-kilos-day-stat').textContent = filteredAvgKilosPerDay.toFixed(2);
+
+
+        // --- Kilos por Día de la Semana Graph ---
+        const kilosPorDiaSemana = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 }; // 1=Lunes, ..., 7=Domingo
+        filteredEntries.forEach(entry => {
+            // Only include Monday to Thursday (1 to 4)
+            if (entry.weekday >= 1 && entry.weekday <= 4) {
+                kilosPorDiaSemana[entry.weekday] += entry.peso;
+            }
+        });
+
+        const diasSemanaLabels = ['Lunes', 'Martes', 'Miércoles', 'Jueves'];
+        const kilosPorDiaSemanaValues = [
+            kilosPorDiaSemana[1],
+            kilosPorDiaSemana[2],
+            kilosPorDiaSemana[3],
+            kilosPorDiaSemana[4]
+        ];
+
+        const trace1 = {
+            x: diasSemanaLabels,
+            y: kilosPorDiaSemanaValues,
+            type: 'bar',
+            marker: {
+                color: 'rgba(75, 192, 192, 0.6)'
+            }
+        };
+        const layout1 = {
+            title: 'Kilos Totales por Día de la Semana',
+            xaxis: { title: 'Día de la Semana' },
+            yaxis: { title: 'Kilos' }
+        };
+        Plotly.newPlot('graph-kilos-por-dia', [trace1], layout1);
+
+        // --- Kilos por Donante Graph ---
+        const kilosPorDonante = {};
+        filteredEntries.forEach(entry => {
+            if (kilosPorDonante[entry.donante_nombre]) {
+                kilosPorDonante[entry.donante_nombre] += entry.peso;
+            } else {
+                kilosPorDonante[entry.donante_nombre] = entry.peso;
+            }
+        });
+
+        const donanteLabels = Object.keys(kilosPorDonante);
+        const donanteValues = Object.values(kilosPorDonante);
+
+        const trace2 = {
+            x: donanteLabels,
+            y: donanteValues,
+            type: 'bar',
+            marker: {
+                color: 'rgba(153, 102, 255, 0.6)'
+            }
+        };
+        const layout2 = {
+            title: 'Kilos Totales por Donante',
+            xaxis: { title: 'Donante' },
+            yaxis: { title: 'Kilos' }
+        };
+        Plotly.newPlot('graph-kilos-por-donante', [trace2], layout2);
+    }
+
+    // Event Listeners for date changes
+    startDateInput.addEventListener('change', filterAndRenderGraphs);
+    endDateInput.addEventListener('change', filterAndRenderGraphs);
+
+    // Initial render
+    filterAndRenderGraphs();
+  </script>
+{% endblock javascripts %}

@@ -1,8 +1,13 @@
+import json
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.db.models import Sum, Min, Count
+from django.db.models.functions import TruncDate, ExtractWeekDay
+from datetime import datetime, timedelta, date
 
 from .forms import MenuPrincipalForm,EntradasForm,SalidasForm
 from .models import AlEnt,Donante,TipoAl,AlSal,Benef
+from .data_utils import get_all_entries_data_for_frontend, get_overall_statistics_data # Importar las nuevas funciones
 
 @login_required
 def redirigir_por_grupo(request):
@@ -71,3 +76,15 @@ def salidas(request):
     return render(request, 'refood_app/salidas.html', {
             'form': form,
         })
+
+@login_required
+def estadisticas(request):
+    # Obtener todos los datos de AlEnt para procesar en el cliente
+    all_entries_data = get_all_entries_data_for_frontend()
+    overall_stats = get_overall_statistics_data()
+
+    context = {
+        'all_entries_json': json.dumps(all_entries_data),
+        'overall_stats_json': json.dumps(overall_stats),
+    }
+    return render(request, 'refood_app/estadisticas.html', context)
