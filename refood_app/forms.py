@@ -1,10 +1,10 @@
-from datetime import datetime,timedelta
+from datetime import datetime,timedelta, date
 from email.policy import default
 
 from django import forms
 from django.db import connections
 from django.utils import timezone
-from .models import AlEnt,TipoAl,Donante,Benef
+from .models import AlEnt,TipoAl,Donante,Benef, AlSal # Importar AlSal
 
 def get_tipos_alimentos():
     return TipoAl.objects.values_list('id', 'nombre_alimento').order_by('nombre_alimento')
@@ -19,17 +19,23 @@ def get_beneficiarios():
         for b in beneficiarios
     ]
 
-def get_alimentos_entrada(fecha_llegada: datetime):
-    al_entrada = (AlEnt.objects.filter(
-        fecha_y_hora_entrada__gt=fecha_llegada
-    ).select_related(
-        "donante", "tipo_al"
-    ).values_list(
-        "id", "tipo_al__nombre_alimento", "donante__nombre"
-    )).order_by('tipo_al__nombre_alimento')
+def get_alimentos_entrada(min_date: date): # Cambiado selected_date a min_date
+    # Obtener IDs de AlEnt que ya han sido usados en AlSal
+    used_al_ent_ids = AlSal.objects.values_list('al_ent_id', flat=True)
+
+    # Filtrar AlEnt que no están usados y cuya fecha de entrada es igual o posterior a la min_date
+    al_entrada = (AlEnt.objects.exclude(id__in=used_al_ent_ids)
+                  .filter(fecha_y_hora_entrada__date__gte=min_date) # Cambiado de lte a gte
+                  .select_related("donante", "tipo_al")
+                  .values_list("id", "tipo_al__nombre_alimento", "donante__nombre", "fecha_y_hora_entrada"))
+    
+    # Formatear para mostrar, incluyendo la fecha y manteniendo el orden alfabético
+    # Primero ordenar por nombre de alimento, luego por fecha de entrada
+    sorted_al_entrada = sorted(al_entrada, key=lambda x: (x[1], x[3]))
+
     return [
-        (a[0], f"{a[1]} - {a[2]}")
-        for a in al_entrada
+        (a[0], f"{a[1]} - {a[2]} ({a[3].strftime('%Y-%m-%d')})")
+        for a in sorted_al_entrada
     ]
 
 
@@ -123,12 +129,10 @@ class SalidasForm(forms.Form):
         min_value=1
     )
 
-    def __init__(self, *args, fecha_llegada=None, **kwargs):
+    def __init__(self, *args, min_date=None, **kwargs): # Cambiado selected_date a min_date
         super().__init__(*args, **kwargs)
-        if fecha_llegada is None:
-            fecha_llegada = timezone.now() - timedelta(hours=12)
-        self.fecha_salida_val = fecha_llegada  # guardamos para usar en get_al_entrada
-        # Rellenar choices dinámicamente en cada instancia del formulario
-        self.fields['al_entrada'].choices = get_alimentos_entrada(fecha_llegada=fecha_llegada)
+        if min_date is None:
+            min_date = timezone.localdate() # Por defecto, la fecha actual
+        
+        self.fields['al_entrada'].choices = get_alimentos_entrada(min_date=min_date) # Pasar min_date
         self.fields['beneficiario'].choices = get_beneficiarios()
-

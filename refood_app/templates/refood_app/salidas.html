@@ -1,7 +1,7 @@
 {% extends 'refood_app/base.html' %}
 {% load static %}
 {% load i18n %}
-{% block title %} {% trans "Home" %} {% endblock title %}
+{% block title %} {% trans "Salidas" %} {% endblock title %}
 
 {% block stylesheets %}
   {{ block.super }}
@@ -10,18 +10,24 @@
 {% block content %}
 <section class="about-generic-area section-gap-60">
   <div class="container">
-    <form method="post" action="{% url 'salidas' %}">
+    <form method="post" action="{% url 'salidas' %}?date={{ selected_date }}"> {# Asegurarse de que la fecha se mantenga en el POST #}
       {% csrf_token %}
       <div class="card">
         <div class="card-header" id="headingTwo">
-          <h5 class="mb-0">Formulario de entradas</h5>
+          <h5 class="mb-0">Formulario de Salidas</h5>
         </div>
         <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label for="id_date_filter">Filtrar Alimentos por Fecha de Entrada:</label>
+              <input type="date" id="id_date_filter" class="form-control" value="{{ selected_date }}">
+            </div>
+          </div>
           <div class="row">
             <!-- Columna izquierda: formulario -->
             <div class="col-md-8">
 				<fieldset>
-                <legend>Bbeneficiario</legend>
+                <legend>Beneficiario</legend>
                 <div class="form-group">
                   {{ form.beneficiario }}
                 </div>
@@ -65,6 +71,14 @@
 
 {% block javascripts %}
 	{{ block.super }}
+	<script>
+        document.getElementById('id_date_filter').addEventListener('change', function() {
+            const selectedDate = this.value;
+            if (selectedDate) {
+                window.location.href = "{% url 'salidas' %}?date=" + selectedDate;
+            }
+        });
+	</script>
 	<script src="{% static 'refood_app/js/vendors/revolution/js/jquery.themepunch.tools.min.js' %}"></script>
 	<script src="{% static 'refood_app/js/vendors/revolution/js/jquery.themepunch.revolution.min.js' %}"></script>
 {% endblock javascripts %}
