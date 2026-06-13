@@ -1,10 +1,13 @@
+import json
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from django.db.models import Sum
-from datetime import datetime, timedelta
+from django.db.models import Sum, Min, Count
+from django.db.models.functions import TruncDate, ExtractWeekDay
+from datetime import datetime, timedelta, date
 
 from .forms import MenuPrincipalForm,EntradasForm,SalidasForm
 from .models import AlEnt,Donante,TipoAl,AlSal,Benef
+from .data_utils import get_all_entries_data_for_frontend, get_overall_statistics_data # Importar las nuevas funciones
 
 @login_required
 def redirigir_por_grupo(request):
@@ -76,32 +79,12 @@ def salidas(request):
 
 @login_required
 def estadisticas(request):
-    # Lógica para obtener los datos de los gráficos
-    # Kilos totales por día (últimos 7 días)
-    today = datetime.now().date()
-    dates = [today - timedelta(days=i) for i in range(7)]
-    dates.reverse() # Para tener las fechas en orden ascendente
-
-    kilos_por_dia = []
-    for d in dates:
-        total_kilos = AlEnt.objects.filter(fecha_y_hora_entrada__date=d).aggregate(Sum('peso'))['peso__sum'] or 0
-        kilos_por_dia.append(float(total_kilos)) # Convertir a float para Chart.js
-
-    # Kilos medios por día (últimos 7 días)
-    kilos_medios_por_dia = []
-    for d in dates:
-        total_kilos_salida = AlSal.objects.filter(fecha_salida__date=d).aggregate(Sum('al_ent__peso'))['al_ent__peso__sum'] or 0
-        num_salidas = AlSal.objects.filter(fecha_salida__date=d).count()
-        
-        if num_salidas > 0:
-            media_kilos = total_kilos_salida / num_salidas
-        else:
-            media_kilos = 0
-        kilos_medios_por_dia.append(float(media_kilos))
+    # Obtener todos los datos de AlEnt para procesar en el cliente
+    all_entries_data = get_all_entries_data_for_frontend()
+    overall_stats = get_overall_statistics_data()
 
     context = {
-        'dates': [d.strftime('%Y-%m-%d') for d in dates],
-        'kilos_por_dia': kilos_por_dia,
-        'kilos_medios_por_dia': kilos_medios_por_dia,
+        'all_entries_json': json.dumps(all_entries_data),
+        'overall_stats_json': json.dumps(overall_stats),
     }
     return render(request, 'refood_app/estadisticas.html', context)
